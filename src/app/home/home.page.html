@@ -1,20 +1,49 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="dark">
     <ion-title>
-      Blank
+      neksPaint
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [forceOverscroll]="false">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <ion-row>
+    <ion-col *ngFor="let color of colors" [style.background]="color" class="color-block" tappable
+      (click)="selectColor(color)"></ion-col>
+  </ion-row>
+  <ion-radio-group [(ngModel)]="selectedColor">
+    <ion-row>
+      <ion-col *ngFor="let color of colors" class="ion-text-center">
+        <ion-radio [value]="color"></ion-radio>
+      </ion-col>
+    </ion-row>
+  </ion-radio-group>
+
+  <ion-range min="2" max="30" color="primary" [(ngModel)]="lineWidth">
+    <ion-icon size="small" slot="start" name="brush"></ion-icon>
+    <ion-icon size="large" slot="end" name="brush"></ion-icon>
+  </ion-range>
+  <div>
+    <canvas #imageCanvas (mousedown)="startDrawing($event)" (touchstart)="startDrawing($event)"
+    (touchmove)="moved($event)" (mousemove)="moved($event)" (mouseup)="endDrawing()" (touchend)="endDrawing()"></canvas>
   </div>
-</ion-content>
+  <div id="buttons">
+    <!-- <ion-button class="bttm_buttons" expand="block" (click)="setBackgroundWhite()">
+      <ion-icon slot="start" name="image"></ion-icon>
+      Adicionar fundo branco á tela
+    </ion-button> -->
+    <ion-button class="bttm_buttons" expand="block" (click)="setBackground(this.camera.PictureSourceType.CAMERA)">
+      <ion-icon slot="start" name="image"></ion-icon>
+      Adicionar imagem de fundo
+    </ion-button>
+    <ion-button class="bttm_buttons" expand="block" (click)="exportCanvasImage()" color="success">
+      <ion-icon slot="start" name="download"></ion-icon>
+      Salvar tela de pintura
+    </ion-button>
+    <ion-button class="bttm_buttons" expand="block" (click)="clearCanvas()" color="danger">
+      <ion-icon slot="start" name="trash"></ion-icon>
+      Limpar tela
+    </ion-button>
+  </div>
+  </ion-content>
